@@ -3,6 +3,19 @@ const app = express();
 const mongoose = require("mongoose");
 
 let Port = 8080;
+const MONGO_URL = "mongodb://127.0.0.1:27017/chillcasa";
+
+main().then((res)=>{
+    console.log("MongoDB connetion successful");
+}).catch(err=>console.log(err));
+
+async function main(){
+    mongoose.connect(MONGO_URL);
+}
+
+app.get("/",(req,res)=>{
+    res.send("At Home");
+})
 
 app.listen(Port,()=>{
     console.log("listening to the Port : 8080");
