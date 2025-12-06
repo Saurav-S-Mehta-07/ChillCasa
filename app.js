@@ -25,8 +25,6 @@ app.get("/",(req,res)=>{
     res.send("At Home");
 })
 
-
-
 //index route
 app.get("/listings",async (req,res)=>{
    const allListings = await Listing.find();
