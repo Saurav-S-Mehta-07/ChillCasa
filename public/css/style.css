@@ -1,8 +1,20 @@
 
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
 .navbar{
     height: rem;
     background-color: white;
 }
+
+
+/* footer */
+
 
 .fa-bluesky{
     color: #fe4244;
@@ -50,4 +62,42 @@
     align-content: space-evenly;
     background-color: white;
     text-align: center;
+}
+
+
+/* cards */
+
+.card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    height: 15rem;
+}
+
+
+.card-body{
+    padding: 0 !important;
+}
+
+.card-text p{
+    font-weight: 400 !important;
+    color: #222222 !important;
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+/* card effect */
+.card-img-overlay{
+    opacity: 0;
+}
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
 }
