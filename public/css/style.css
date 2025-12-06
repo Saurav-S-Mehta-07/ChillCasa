@@ -84,7 +84,7 @@ body{
     border-radius: 1rem !important;
     width: 100% !important;
     object-fit: cover !important;
-    height: 15rem;
+    height: 20rem;
 }
 
 
@@ -120,3 +120,9 @@ body{
     border-radius: 12px;
 }
 
+
+/* show page */
+
+.show-img{
+    height: 30vh;
+}
