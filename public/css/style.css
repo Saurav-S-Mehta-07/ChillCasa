@@ -111,10 +111,12 @@ body{
 }
 
 
-.add-btn{
+.add-btn,.edit-btn{
     background-color: #fe4244;
+    color: white;
     border: none;
     width: 80px;
     height: 40px;
     border-radius: 12px;
 }
+
