@@ -25,10 +25,7 @@ app.get("/",(req,res)=>{
     res.send("At Home");
 })
 
-//create route
-app.get("/listings/new",(req,res)=>{
-    res.render("listings/new.ejs");
-})
+
 
 //index route
 app.get("/listings",async (req,res)=>{
@@ -36,11 +33,36 @@ app.get("/listings",async (req,res)=>{
    res.render("listings/index.ejs",{allListings});
 })
 
+//create route
+app.get("/listings/new",(req,res)=>{
+    res.render("listings/new.ejs");
+})
+
+//edit route
+app.post("/listings",async(req,res)=>{
+   const newListing  = new Listing(req.body.listing);
+   await newListing.save();
+   res.redirect("/listings");
+})
+
+//update route
+app.put("/listings/:id",async(req,res)=>{
+    let {id} = req.params;
+    await Listing.findByIdAndUpdate(id, {...req.body.listing});
+    res.redirect(`/listings/${id}`);
+})
+
 //show route
 app.get("/listings/:id",async(req,res)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/show",{listing});
+})
+
+app.get("/listings/:id/edit",async(req,res)=>{
+    let {id} = req.params;
+    let listing = await Listing.findById(id);
+    res.render("listings/edit.ejs",{listing});
 })
 
 
