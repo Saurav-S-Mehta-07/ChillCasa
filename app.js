@@ -46,9 +46,9 @@ app.post("/listings",wrapAsync(async(req,res,next)=>{
     if(!req.body.listing){
         throw new ExpressError(400,"send valid data for listing");
     }
-     const newListing  = new Listing(req.body.listing);
-     await newListing.save();
-     res.redirect("/listings");
+    const newListing  = new Listing(req.body.listing);
+    await newListing.save();
+    res.redirect("/listings");
 }));
 
 //update route
@@ -57,20 +57,26 @@ app.put("/listings/:id",wrapAsync(async(req,res)=>{
         throw new ExpressError(400,"send valid data for listing");
     }
     let {id} = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
+    await Listing.findByIdAndUpdate(id, {...req.body.listing},{runValidators:true});
     res.redirect(`/listings/${id}`);
 }));
 
 //show route
-app.get("/listings/:id",wrapAsync(async(req,res)=>{
+app.get("/listings/:id",wrapAsync(async(req,res,next)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
+    if(!listing){
+        return next(new ExpressError(404,"Listing not found"));
+    }
     res.render("listings/show",{listing});
 }));
 
-app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
+app.get("/listings/:id/edit",wrapAsync(async(req,res,next)=>{
     let {id} = req.params;
     let listing = await Listing.findById(id);
+    if(!listing){
+        return next(new ExpressError(404,"Listing not found"));
+    }
     res.render("listings/edit.ejs",{listing});
 }));
 
@@ -88,8 +94,7 @@ app.use((req,res,next)=>{
 
 //error handling middleware
 app.use((err,req,res,next)=>{
-   let {status=500, message="something went wrong"} = err;
-   res.status(status).send(message);
+   res.render("error",{err});
 })
 
 app.listen(Port,()=>{
