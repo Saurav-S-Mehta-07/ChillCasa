@@ -176,5 +176,6 @@ body{
     justify-content: center;
     align-items: center;
     height: fit-content;
+    width: fit-content;
     border-radius: 20px !important;
 }

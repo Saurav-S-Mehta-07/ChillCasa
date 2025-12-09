@@ -7,13 +7,14 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require('./utils/wrapAsync.js');
 const ExpressError = require("./utils/ExpressError.js");
-const { wrap } = require("module");
+const { ListingSchema }  = require("./schema.js");
 
 let Port = 8080;
 const MONGO_URL = "mongodb://127.0.0.1:27017/chillcasa";
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
@@ -31,6 +32,18 @@ app.get("/",(req,res)=>{
     res.send("At Home");
 })
 
+//joi handling
+const validateListing = (req,res,next)=>{
+  let {error} = ListingSchema.validate(req.body);
+  if(error){
+    let errorMsg = error.details.map((el)=> el.message).join(",");
+    throw new ExpressError(400,errorMsg);
+  }
+  else{
+    next();
+  }
+}
+
 //index route
 app.get("/listings",wrapAsync(async (req,res)=>{
    const allListings = await Listing.find();
@@ -42,20 +55,14 @@ app.get("/listings/new",(req,res)=>{
     res.render("listings/new.ejs");
 })
 
-app.post("/listings",wrapAsync(async(req,res,next)=>{
-    if(!req.body.listing){
-        throw new ExpressError(400,"send valid data for listing");
-    }
-    const newListing  = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listings");
+app.post("/listings", validateListing, wrapAsync(async(req,res)=>{
+   const newListing = new Listing(req.body.listing); 
+   await newListing.save();
+   res.redirect("/listings");
 }));
 
 //update route
-app.put("/listings/:id",wrapAsync(async(req,res)=>{
-    if(!req.body.listing){
-        throw new ExpressError(400,"send valid data for listing");
-    }
+app.put("/listings/:id",validateListing,wrapAsync(async(req,res)=>{
     let {id} = req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing},{runValidators:true});
     res.redirect(`/listings/${id}`);
