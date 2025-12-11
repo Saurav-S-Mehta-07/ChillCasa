@@ -8,7 +8,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require('./utils/wrapAsync.js');
 const ExpressError = require("./utils/ExpressError.js");
-const { ListingSchema }  = require("./schema.js");
+const { ListingSchema, reviewSchema }  = require("./schema.js");
 
 let Port = 8080;
 const MONGO_URL = "mongodb://127.0.0.1:27017/chillcasa";
@@ -36,6 +36,17 @@ app.get("/",(req,res)=>{
 //joi handling
 const validateListing = (req,res,next)=>{
   let {error} = ListingSchema.validate(req.body);
+  if(error){
+    let errorMsg = error.details.map((el)=> el.message).join(",");
+    throw new ExpressError(400,errorMsg);
+  }
+  else{
+    next();
+  }
+}
+
+const validateReview = (req,res,next)=>{
+  let {error} = reviewSchema.validate(req.body);
   if(error){
     let errorMsg = error.details.map((el)=> el.message).join(",");
     throw new ExpressError(400,errorMsg);
@@ -97,7 +108,7 @@ app.delete("/listings/:id",wrapAsync(async(req,res)=>{
 
 //reviews
 //post route
-app.post("/listings/:id/review", async(req,res)=>{
+app.post("/listings/:id/review",validateReview,wrapAsync(async(req,res)=>{
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
 
@@ -107,7 +118,7 @@ app.post("/listings/:id/review", async(req,res)=>{
     await listing.save();
     console.log("new review saved");
     res.redirect(`/listings/${listing._id}`);
-})
+}));
 
 //page not found
 app.use((req,res,next)=>{
