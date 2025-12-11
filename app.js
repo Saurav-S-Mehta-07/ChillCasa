@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -93,6 +94,20 @@ app.delete("/listings/:id",wrapAsync(async(req,res)=>{
    await Listing.findByIdAndDelete(id);
    res.redirect("/listings");
 }));
+
+//reviews
+//post route
+app.post("/listings/:id/review", async(req,res)=>{
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+    console.log("new review saved");
+    res.redirect(`/listings/${listing._id}`);
+})
 
 //page not found
 app.use((req,res,next)=>{

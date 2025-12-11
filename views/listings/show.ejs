@@ -24,18 +24,35 @@
 
        </div>
     </div>
+
     <hr>
+
     <div class="col-8 offset-2 mb-3">
        <h4>Leave a Review</h4>
-       <form action="" class="mb-3">
+       <form action="/listings/<%=listing._id%>/review"
+             method="post" class="mb-3 needs-validation"
+             novalidate 
+        >
+
           <div class="mb-3">
             <label for="rating" class="form-label">Rating</label>
-            <input type="range" min="1" max="5" id="rating" class="form-control" name="review[rating]">
+            <input type="range" min="1" max="5"
+                   id="rating" class="form-control"
+                  name="review[rating]"
+                  required
+            >
           </div>
+
           <div class="mb-3">
             <label for="comment" class="form-label">Comment</label>
-            <textarea name="review[comment]" id="commect" class="form-control"></textarea>
+            <textarea name="review[comment]" id="commect"
+                      class="form-control" required
+            ></textarea>
+             <div class="invalid-feedback">
+               please add a comment
+             </div>
           </div>
+          
           <button class="btn btn-outline-dark">Submit</button>
        </form>
     </div>
