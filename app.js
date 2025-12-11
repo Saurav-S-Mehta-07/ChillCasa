@@ -83,7 +83,7 @@ app.put("/listings/:id",validateListing,wrapAsync(async(req,res)=>{
 //show route
 app.get("/listings/:id",wrapAsync(async(req,res,next)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     if(!listing){
         return next(new ExpressError(404,"Listing not found"));
     }
@@ -116,7 +116,6 @@ app.post("/listings/:id/review",validateReview,wrapAsync(async(req,res)=>{
 
     await newReview.save();
     await listing.save();
-    console.log("new review saved");
     res.redirect(`/listings/${listing._id}`);
 }));
 
