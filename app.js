@@ -6,8 +6,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 
-const listing = require('./routes/listing.js');
-const review  = require('./routes/review.js');
+const listings = require('./routes/listing.js');
+const reviews  = require('./routes/review.js');
 
 let Port = 8080;
 const MONGO_URL = "mongodb://127.0.0.1:27017/chillcasa";
@@ -33,10 +33,10 @@ app.get("/",(req,res)=>{
 })
 
 //listings routes
-app.use("/listings",listing);
+app.use("/listings",listings);
 
 //reviews routes
-app.use("/listings/:id/reviews",review);
+app.use("/listings/:id/reviews",reviews);
 
 //page not found
 app.use((req,res,next)=>{
