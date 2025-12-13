@@ -124,7 +124,7 @@ body{
 /* show page */
 
 .show-edit-btn{
-    width: 40%;
+    width: 40% !important;
     text-align: center;
     background-color: #fe4244;
     color: white;
@@ -141,13 +141,18 @@ body{
 }
 
 .show-dlt-btn{
+    width: 60% !important;
     background-color: rgb(126, 126, 230);
     color: white;
     border: none;
-    width: 150px;
     height: 50px;
     border-radius: 12px;
     text-decoration: none;
+}
+
+.show-btn-form{
+    width: 60% !important;
+    text-align: center;
 }
 
 .show-dlt-btn:hover{
@@ -159,7 +164,7 @@ body{
 
 .show-btns{
     display: flex;
-    width: 40%;
+    width: 100%;
     justify-content: space-evenly;
     align-items: center;
 }
