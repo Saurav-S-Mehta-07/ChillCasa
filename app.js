@@ -6,6 +6,9 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser("secretcode"));
+
 const listings = require('./routes/listing.js');
 const reviews  = require('./routes/review.js');
 
@@ -29,8 +32,21 @@ async function main(){
 }
 
 app.get("/",(req,res)=>{
+    console.log(req.cookies);
     res.send("At Home");
 })
+
+app.get("/getcookies",(req,res)=>{
+    res.cookie("greet","hello",{signed:true});
+    res.cookie("color","red");
+    res.send("getting cookies");
+})
+
+app.get("/verify",(req,res)=>{
+    console.log(req.signedCookies);
+    res.send("verified");
+})
+
 
 //listings routes
 app.use("/listings",listings);
