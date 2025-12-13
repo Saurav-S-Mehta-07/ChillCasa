@@ -36,18 +36,6 @@ app.get("/",(req,res)=>{
     res.send("At Home");
 })
 
-app.get("/getcookies",(req,res)=>{
-    res.cookie("greet","hello",{signed:true});
-    res.cookie("color","red");
-    res.send("getting cookies");
-})
-
-app.get("/verify",(req,res)=>{
-    console.log(req.signedCookies);
-    res.send("verified");
-})
-
-
 //listings routes
 app.use("/listings",listings);
 
